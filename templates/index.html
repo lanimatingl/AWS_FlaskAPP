@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="upload-container">
+        <h1>File Upload</h1>
+        
+        <div class="js-required-message" style="display: none;">
+            JavaScript is required for the full functionality of this page. 
+            Please enable JavaScript or use the simple upload form below.
+        </div>
+
+        <div class="upload-area" id="dropZone">
+            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+            <p class="upload-text">Drag & Drop files here or click to browse</p>
+            <p class="file-types">Allowed files: .pdf, .png, .jpg, .jpeg, .gif, .txt, .doc, .docx</p>
+            <input type="file" id="fileInput" multiple style="display: none;">
+        </div>
+        
+        <!-- Simple form for when JavaScript is disabled -->
+        <form class="simple-upload-form" action="/upload" method="post" enctype="multipart/form-data" style="display: none;">
+            <input type="file" name="file" required>
+            <button type="submit" class="upload-button" style="margin-top: 1rem;">Upload File</button>
+        </form>
+        
+        <div class="file-list" id="fileList">
+            <!-- Files to upload will be added here dynamically -->
+        </div>
+        
+        <div class="status" id="status" style="display: none;"></div>
+        
+        <button class="upload-button" id="uploadButton" disabled>Upload Files</button>
+
+        <div class="uploaded-files">
+            <h2>Uploaded Files</h2>
+            {% if files %}
+                <div class="file-list-header">
+                    <span class="file-name-header">File Name</span>
+                    <span class="file-size-header">Size</span>
+                    <span class="file-date-header">Upload Date</span>
+                    <span class="file-actions-header">Actions</span>
+                </div>
+                <div class="uploaded-files-list">
+                    {% for file in files %}
+                    <div class="uploaded-file-item">
+                        <div class="file-info">
+                            <i class="fas fa-file file-icon"></i>
+                            <span class="file-name">{{ file.name }}</span>
+                            <span class="file-size">{{ file.size }} MB</span>
+                            <span class="file-date">{{ file.last_modified }}</span>
+                        </div>
+                        <div class="file-actions">
+                            <a href="{{ url_for('download_file', filename=file.name) }}" class="action-button download-button" title="Download">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="action-button delete-button" onclick="deleteFile('{{ file.name }}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-files">
+                    <i class="fas fa-folder-open"></i>
+                    <p>No files uploaded yet</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        // Check if JavaScript is enabled and hide the message/show the proper form
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.js-required-message').style.display = 'none';
+            document.querySelector('.simple-upload-form').style.display = 'none';
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}
