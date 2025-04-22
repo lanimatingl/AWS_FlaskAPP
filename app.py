@@ -8,9 +8,9 @@ from datetime import datetime
 app = Flask(__name__)
 
 
-AWS_ACCESS_KEY = 'X'
-AWS_SECRET_KEY = 'X'
-BUCKET_NAME = 'X'
+AWS_ACCESS_KEY = 'AKIAWC4DXFC6GJY3MZVX'
+AWS_SECRET_KEY = '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'
+BUCKET_NAME = 'xwebappahmedx '
 
 
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif', 'txt', 'doc', 'docx'}
